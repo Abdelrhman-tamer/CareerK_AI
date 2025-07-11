@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{{ cv.personal_info.name }} - CV</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Arial, sans-serif;
+                font-size: 12px;
+                padding: 28px;
+                margin: 0;
+                color: #222;
+                background-color: #fff;
+                line-height: 1.5;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 28px;
+                page-break-inside: avoid;
+            }
+
+            .header h1 {
+                font-size: 24px;
+                margin: 0;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                margin: 4px 0;
+                font-size: 12px;
+            }
+
+            .section {
+                margin-bottom: 26px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .section-title {
+                font-size: 14px;
+                font-weight: bold;
+                border-left: 4px solid #000;
+                padding-left: 10px;
+                background-color: #f1f1f1;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .item {
+                margin-bottom: 12px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .item p {
+                margin: 2px 0;
+            }
+
+            ul {
+                margin-top: 4px;
+                margin-bottom: 4px;
+                padding-left: 18px;
+            }
+
+            li {
+                margin-bottom: 3px;
+            }
+
+            .skill-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 8px;
+            }
+
+            .skill-list div {
+                background-color: #f0f0f0;
+                padding: 6px 12px;
+                border-radius: 16px;
+                font-size: 12px;
+                white-space: nowrap;
+                text-align: center;
+                width: calc(25% - 8px); /* 4 pills per row with gap */
+                box-sizing: border-box;
+            }
+
+            /* .skill-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 8px;
+            }
+
+            .skill-list div {
+                background-color: #f0f0f0;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+            } */
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>{{ cv.personal_info.name }}</h1>
+            <p>{{ cv.personal_info.address }}</p>
+            <p>
+                <strong>{{ cv.personal_info.email }}</strong> | {{
+                cv.personal_info.phone }}
+            </p>
+            {% if cv.personal_info.linkedin %}
+            <p>LinkedIn: {{ cv.personal_info.linkedin }}</p>
+            {% endif %} {% if cv.personal_info.portfolio %}
+            <p>Portfolio: {{ cv.personal_info.portfolio }}</p>
+            {% endif %}
+        </div>
+
+        {% if cv.personal_info.summary %}
+        <div class="section">
+            <div class="section-title">Professional Summary</div>
+            <p>{{ cv.personal_info.summary }}</p>
+        </div>
+        {% endif %} {% if cv.experience %}
+        <div class="section">
+            <div class="section-title">Experience</div>
+            {% for exp in cv.experience %}
+            <div class="item">
+                <p><strong>{{ exp.position }}</strong> – {{ exp.company }}</p>
+                <p><em>{{ exp.dates }}</em></p>
+                {% if exp.achievements %}
+                <ul>
+                    {% for a in exp.achievements %}
+                    <li>{{ a }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} {% if cv.education %}
+        <div class="section">
+            <div class="section-title">Education</div>
+            {% for edu in cv.education %}
+            <div class="item">
+                <p><strong>{{ edu.degree }}</strong> in {{ edu.field }}</p>
+                <p>{{ edu.institution }}</p>
+                <p><em>{{ edu.start_date }} – {{ edu.end_date }}</em></p>
+                {% if edu.gpa %}
+                <p>GPA: {{ edu.gpa }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} {% if cv.skillsets %}
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="skill-list">
+                {% for skill in cv.skillsets %}
+                <div>{{ skill }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %} {% if cv.projects %}
+        <div class="section">
+            <div class="section-title">Projects</div>
+            {% for p in cv.projects %}
+            <div class="item">
+                <p><strong>{{ p.title }}</strong></p>
+                <p>{{ p.description }}</p>
+                {% if p.technologies %}
+                <p>
+                    <strong>Technologies:</strong> {{ p.technologies | join(",
+                    ") }}
+                </p>
+                {% endif %} {% if p.results %}
+                <ul>
+                    {% for r in p.results %}
+                    <li>{{ r }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} {% if cv.certifications %}
+        <div class="section">
+            <div class="section-title">Certifications</div>
+            {% for cert in cv.certifications %}
+            <div class="item">
+                <p>
+                    <strong>{{ cert.name }}</strong>{% if cert.issuer %}, {{
+                    cert.issuer }}{% endif %}{% if cert.date %} – {{ cert.date
+                    }}{% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} {% if cv.additional %}
+        <div class="section">
+            <div class="section-title">Additional Information</div>
+            {% for a in cv.additional %}
+            <div class="item">
+                <p><strong>{{ a.title }}</strong>: {{ a.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </body>
+</html>
